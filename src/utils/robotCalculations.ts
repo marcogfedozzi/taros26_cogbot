@@ -149,6 +149,47 @@ export function calculateComponentState(
   const isRequirementMissing = missingRequirements.length > 0;
   const canBeSelected = !isIncompatible && !isRequirementMissing;
 
+  // 5. Warnings checking
+  const activeWarnings: string[] = [];
+  if (component.conditionalWarnings) {
+    for (const cw of component.conditionalWarnings) {
+      let triggered = false;
+      // Triggers if ANY of whenSelectedWith are selected
+      if (cw.whenSelectedWith && cw.whenSelectedWith.length > 0) {
+        const hasTrigger = cw.whenSelectedWith.some(
+          id => selectedItemIds.includes(id) && id !== component.id
+        );
+        if (hasTrigger) {
+          triggered = true;
+        }
+      }
+      // Triggers if this item is selected AND any of the safety items are missing
+      if (cw.whenMissing && cw.whenMissing.length > 0) {
+        if (isSelected && cw.whenMissing.some(id => !selectedItemIds.includes(id))) {
+          triggered = true;
+        }
+      }
+      if (triggered && !activeWarnings.includes(cw.message)) {
+        activeWarnings.push(cw.message);
+      }
+    }
+  }
+
+  // Also check if any other SELECTED component has conditional warnings triggered by this component
+  for (const selectedId of selectedItemIds) {
+    if (selectedId === component.id) continue;
+    const selectedComp = componentMap.get(selectedId);
+    if (selectedComp && selectedComp.conditionalWarnings) {
+      for (const cw of selectedComp.conditionalWarnings) {
+        if (cw.whenSelectedWith && cw.whenSelectedWith.includes(component.id)) {
+          if (!activeWarnings.includes(cw.message)) {
+            activeWarnings.push(cw.message);
+          }
+        }
+      }
+    }
+  }
+
   return {
     component,
     isSelected,
@@ -161,7 +202,9 @@ export function calculateComponentState(
     incompatibleBecause,
     isRequirementMissing,
     missingRequirements,
-    canBeSelected
+    canBeSelected,
+    activeWarnings,
+    staticWarning: component.warning
   };
 }
 
@@ -215,6 +258,7 @@ export function calculateConfigurationSummary(
   let totalEffectiveCost = 0;
   const activeSynergies: ConfigurationSummary['activeSynergies'] = [];
   const synergyDeduplication = new Set<string>();
+  const warnings: string[] = [];
 
   for (const item of selectedComponents) {
     selectedByCategory[item.category].push(item);
@@ -236,6 +280,13 @@ export function calculateConfigurationSummary(
         });
       }
     }
+
+    // Collect active dynamic warnings from selected items
+    for (const w of state.activeWarnings) {
+      if (!warnings.includes(w)) {
+        warnings.push(w);
+      }
+    }
   }
 
   const totalSavings = totalBaseCost - totalEffectiveCost;
@@ -244,7 +295,6 @@ export function calculateConfigurationSummary(
 
   const activeEmbodiment = selectedByCategory.embodiment[0] || null;
 
-  const warnings: string[] = [];
   if (!activeEmbodiment) {
     warnings.push("No Embodiment selected. Choose a physical chassis first.");
   }

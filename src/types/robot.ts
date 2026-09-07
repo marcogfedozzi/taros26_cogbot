@@ -9,6 +9,15 @@ export interface CostModifier {
   reason: string;
 }
 
+export interface ConditionalWarning {
+  /** Warning triggers if ANY of these items are currently selected */
+  whenSelectedWith?: string[];
+  /** Warning triggers if ANY of these items are missing from current selection */
+  whenMissing?: string[];
+  /** Human-readable operational or safety caution */
+  message: string;
+}
+
 export interface RobotComponent {
   id: string;
   name: string;
@@ -19,6 +28,10 @@ export interface RobotComponent {
   shortDescription: string;
   detailedDescription: string;
   tags: string[];
+  /** Optional static caution/warning displayed on the component */
+  warning?: string;
+  /** Dynamic architectural warnings based on combination */
+  conditionalWarnings?: ConditionalWarning[];
   /** IDs of components that cannot be chosen together with this one */
   incompatibleWith?: string[];
   /** Optional custom explanation for why it's incompatible */
@@ -73,6 +86,8 @@ export interface EffectiveComponentState {
   isRequirementMissing: boolean;
   missingRequirements: string[];
   canBeSelected: boolean;
+  activeWarnings: string[];
+  staticWarning?: string;
 }
 
 export interface RobotConfigurationState {

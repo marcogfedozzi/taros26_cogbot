@@ -214,6 +214,23 @@ export const CurrentBuildSidebar: React.FC<CurrentBuildSidebarProps> = ({
             <span>Over budget by {Math.abs(summary.remainingPoints)} points</span>
           </div>
         )}
+
+        {/* Operational / Stability Warnings */}
+        {summary.warnings.filter(w => !w.startsWith("No ") && !w.includes("Point budget")).length > 0 && (
+          <div className="p-2.5 bg-amber-950/60 border border-amber-700/60 rounded-lg text-[11px] text-amber-200 space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-amber-300">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Operational &amp; Balance Cautions:</span>
+            </div>
+            {summary.warnings
+              .filter(w => !w.startsWith("No ") && !w.includes("Point budget"))
+              .map((w, idx) => (
+                <p key={idx} className="text-amber-200 text-[10px] leading-tight">
+                  &bull; {w}
+                </p>
+              ))}
+          </div>
+        )}
       </div>
 
       {/* Finalize Configuration Button */}

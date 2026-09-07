@@ -129,6 +129,26 @@ export const OrganizerGuideModal: React.FC<OrganizerGuideModalProps> = ({
             </div>
           </div>
 
+          {/* Icon Reference Banner */}
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <strong className="text-slate-900 block font-semibold">
+                Finding &amp; Changing Component Icons:
+              </strong>
+              <p className="text-slate-500 text-[11px] mt-0.5">
+                Icons are rendered using the open-source <strong>Lucide Icons</strong> library. You can use any icon name (e.g. <code className="bg-white px-1 py-0.5 rounded border border-slate-200 font-mono text-slate-800">"Flame"</code>, <code className="bg-white px-1 py-0.5 rounded border border-slate-200 font-mono text-slate-800">"Radar"</code>, <code className="bg-white px-1 py-0.5 rounded border border-slate-200 font-mono text-slate-800">"ShieldAlert"</code>, <code className="bg-white px-1 py-0.5 rounded border border-slate-200 font-mono text-slate-800">"Wrench"</code>).
+              </p>
+            </div>
+            <a
+              href="https://lucide.dev/icons"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 font-bold text-blue-600 hover:text-blue-800 whitespace-nowrap text-[11px] bg-white border border-slate-200 px-2.5 py-1.5 rounded-lg shadow-2xs hover:bg-slate-50 shrink-0"
+            >
+              Browse 1,000+ Lucide Icons &rarr;
+            </a>
+          </div>
+
           {/* Live Budget Override for in-session testing */}
           {onBudgetOverride && (
             <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex items-center justify-between gap-4">

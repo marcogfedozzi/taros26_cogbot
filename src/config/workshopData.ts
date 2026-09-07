@@ -45,7 +45,7 @@
 import { WorkshopConfig } from '../types/robot';
 
 export const workshopConfig: WorkshopConfig = {
-  workshopTitle: "Rescue Robot Architecture Workshop",
+  workshopTitle: "AI:CogDev @ TAROS26",
   workshopSubtitle: "Embodiment, Perception, Cognition & Motor Repertoire",
   defaultBudget: 100, // Total points each participant gets
   allowOverBudget: false, // Prevents spending more than budget
@@ -65,20 +65,20 @@ export const workshopConfig: WorkshopConfig = {
       recommendedBudget: 100,
       description: "Design an autonomous or semi-autonomous search-and-rescue robot to penetrate deep into the collapsed sub-levels, map navigable paths, locate human vital signs, and report structural stability."
     },
-    {
-      id: "flooded_metro_tunnel",
-      title: "Scenario Beta: Flooded Subway Transit Hub",
-      subtitle: "Subterranean tunnel collapse with rising water and severed communications",
-      environment: "Waist-deep water, submerged debris, live exposed wiring, total communication dead zones, reverberant acoustic echoes.",
-      keyChallenges: [
-        "Mixed amphibious / wading mobility required",
-        "Severed radio signals requiring high local autonomy",
-        "Acoustic noise and echo confusion",
-        "Corrosive brackish water and sharp submerged obstacles"
-      ],
-      recommendedBudget: 100,
-      description: "Design a rescue unit capable of scouting submerged corridors, establishing ad-hoc communication lines, and checking train carriages for trapped commuters."
-    }
+    //{
+    //  id: "flooded_metro_tunnel",
+    //  title: "Scenario Beta: Flooded Subway Transit Hub",
+    //  subtitle: "Subterranean tunnel collapse with rising water and severed communications",
+    //  environment: "Waist-deep water, submerged debris, live exposed wiring, total communication dead zones, reverberant acoustic echoes.",
+    //  keyChallenges: [
+    //    "Mixed amphibious / wading mobility required",
+    //    "Severed radio signals requiring high local autonomy",
+    //    "Acoustic noise and echo confusion",
+    //    "Corrosive brackish water and sharp submerged obstacles"
+    //  ],
+    //  recommendedBudget: 100,
+    //  description: "Design a rescue unit capable of scouting submerged corridors, establishing ad-hoc communication lines, and checking train carriages for trapped commuters."
+    //}
   ],
 
   components: [
@@ -89,7 +89,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "quadruped_robot",
       name: "Agile Quadruped (4-Legged)",
       category: "embodiment",
-      baseCost: 28,
+      baseCost: 22,
       icon: "Dog",
       shortDescription: "Highly agile 4-legged robotic platform with dynamic stepping.",
       detailedDescription: "Excellent at clambering over jagged rubble, climbing stairs, and stepping over gaps. Offers moderate payload capacity and medium battery endurance.",
@@ -106,8 +106,8 @@ export const workshopConfig: WorkshopConfig = {
       id: "tracked_rover",
       name: "Tracked Urban Tank Rover",
       category: "embodiment",
-      baseCost: 26,
-      icon: "Boxes",
+      baseCost: 18,
+      icon: "Forklift",
       shortDescription: "Heavy-duty dual caterpillar track chassis with high torque.",
       detailedDescription: "Superior payload capacity and rugged stability over crushed glass, rebar, and loose gravel. Very stable platform for heavy manipulation, but slower and wider footprint.",
       tags: ["Tracked", "High Payload", "High Torque", "Bulky"],
@@ -123,7 +123,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "snake_robot",
       name: "Modular Snake-like Robot",
       category: "embodiment",
-      baseCost: 24,
+      baseCost: 20,
       icon: "Spline",
       shortDescription: "Slender hyper-redundant articulated snake body for deep crawlspaces.",
       detailedDescription: "Can squeeze through 15 cm pipes and serpentine through dense rubble voids where no other vehicle can enter. Very low payload and cannot mount rigid robotic arms.",
@@ -136,8 +136,8 @@ export const workshopConfig: WorkshopConfig = {
       costModifiers: [
         {
           withItemId: "slither_crevice_gait",
-          costChange: -4,
-          reason: "Native serpentine kinematics synergy (-4 pts)"
+          costChange: -8,
+          reason: "Native serpentine kinematics synergy (-8 pts)"
         }
       ]
     },
@@ -145,11 +145,17 @@ export const workshopConfig: WorkshopConfig = {
       id: "biped_humanoid",
       name: "Bipedal Humanoid Chassis",
       category: "embodiment",
-      baseCost: 34,
+      baseCost: 30,
       icon: "User",
       shortDescription: "Two-legged anthropomorphic frame designed for human architecture.",
       detailedDescription: "Able to turn door handles, climb vertical ladders, and use human tools directly. Requires substantial compute and power for balance stabilization.",
       tags: ["Bipedal", "Anthropomorphic", "Complex Dynamics", "High Center of Mass"],
+      conditionalWarnings: [
+        {
+          whenSelectedWith: ["heavy_debris_shoring", "fire_extinguisher"],
+          message: "High Tipping Hazard: Mounting heavy payloads or high-recoil tools on the bipedal humanoid severely degrades dynamic zero-moment-point stability on uneven rubble."
+        }
+      ],
       costModifiers: [
         {
           withItemId: "dynamic_balance",
@@ -167,7 +173,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "micro_aerial_drone",
       name: "Micro-Aerial Hexacopter",
       category: "embodiment",
-      baseCost: 22,
+      baseCost: 18,
       icon: "Plane",
       shortDescription: "Ultra-compact autonomous flight platform with 3D airspace access.",
       detailedDescription: "Bypasses all ground obstacles, flies up elevator shafts and over chasms. Limited flight time (18 mins) and minimal payload capacity.",
@@ -183,7 +189,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "wheeled_all_terrain",
       name: "6-Wheeled Articulated Rover",
       category: "embodiment",
-      baseCost: 20,
+      baseCost: 16,
       icon: "Disc3",
       shortDescription: "High-efficiency rocker-bogie wheeled rover with extended range.",
       detailedDescription: "Very high electrical efficiency and silent cruising over moderate obstacles and floors. Struggles if large boulders or steep stairs are encountered.",
@@ -197,7 +203,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "rgbd_camera",
       name: "RGB-D Stereo Depth Camera",
       category: "sensor",
-      baseCost: 14,
+      baseCost: 8,
       icon: "Camera",
       shortDescription: "Dense color imagery paired with real-time stereoscopic point clouds.",
       detailedDescription: "Provides high-resolution vision for visual recognition and near-field obstacle avoidance. Degrades significantly in heavy smoke, water spray, or total darkness.",
@@ -209,12 +215,29 @@ export const workshopConfig: WorkshopConfig = {
           reason: "Multispectral optical fusion pipeline reduces compute overhead (-3 pts)"
         }
       ]
+    },    
+    {
+      id: "gps",
+      name: "GPS unit",
+      category: "sensor",
+      baseCost: 12,
+      icon: "Earth",
+      shortDescription: "GPS localization",
+      detailedDescription: "Provides precise localization, might face interferences inside buildings.",
+      tags: ["Spatial Resolution", "Localization"],
+      costModifiers: [
+        {
+          withItemId: "spatial_slam",
+          costChange: -6,
+          reason: "GPS provides global spatial information that SLAM can refine locally (-6 pts)"
+        }
+      ]
     },
     {
       id: "thermal_camera",
       name: "Infrared Thermal Imager",
       category: "sensor",
-      baseCost: 15,
+      baseCost: 10,
       icon: "Flame",
       shortDescription: "Long-wave IR camera detecting human body heat and fire hotspots.",
       detailedDescription: "Penetrates smoke, dust haze, and pitch-black darkness to locate living victims under light blankets or debris. Does not provide detailed geometric depth.",
@@ -224,7 +247,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "lidar_3d",
       name: "Solid-State 3D LiDAR",
       category: "sensor",
-      baseCost: 20,
+      baseCost: 14,
       icon: "Radar",
       shortDescription: "360-degree laser range scanning generating centimeter-grade 3D geometry.",
       detailedDescription: "Immune to low light; accurately maps collapsed halls, ceiling sag, and structural deformities. Requires moderate computational processing.",
@@ -244,7 +267,7 @@ export const workshopConfig: WorkshopConfig = {
       baseCost: 10,
       icon: "Volume2",
       shortDescription: "Beamforming directional mic array to pinpoint faint calls and creaks.",
-      detailedDescription: "Detects tapped Morse codes, survivor crying, gas hissing, or structural cracking sounds. Works through barriers where optical sensors cannot see.",
+      detailedDescription: "Detects survivor crying, gas hissing, or structural cracking sounds. Works through barriers where optical sensors cannot see.",
       tags: ["Audio Triangulation", "Survivor Localization", "Low Power"],
       costModifiers: [
         {
@@ -295,7 +318,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "precision_imu",
       name: "Dual Tactical IMU & Odometry",
       category: "sensor",
-      baseCost: 8,
+      baseCost: 6,
       icon: "Compass",
       shortDescription: "High-grade inertial measurement unit and wheel/joint encoders.",
       detailedDescription: "Tracks acceleration, pitch, roll, and dead-reckoning displacement when external visual tracking or GPS is unavailable.",
@@ -309,7 +332,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "working_memory",
       name: "Working Memory & Context Buffer",
       category: "cognitive",
-      baseCost: 15,
+      baseCost: 8,
       icon: "Cpu",
       shortDescription: "Short-term temporal buffer maintaining recent sensory events & goals.",
       detailedDescription: "Prevents the robot from forgetting recently explored intersections or transient sensor alerts. Foundational substrate for higher-level reasoning.",
@@ -338,11 +361,18 @@ export const workshopConfig: WorkshopConfig = {
       id: "intrinsic_curiosity",
       name: "Developmental Intrinsic Curiosity",
       category: "cognitive",
-      baseCost: 14,
+      baseCost: 6,
       icon: "Sparkles",
       shortDescription: "Novelty-seeking developmental drive for autonomous room exploration.",
-      detailedDescription: "Directs the robot to investigate unfamiliar dark alcoves, open doorways, and sensory anomalies without waiting for teleoperated commands.",
-      tags: ["Autonomy", "Developmental Drive", "Exploration"],
+      detailedDescription: "Directs the robot to investigate unfamiliar dark alcoves, open doorways, and sensory anomalies without waiting for teleoperated commands. Highly risky in unstable domains unless paired with safety prediction.",
+      tags: ["Autonomy", "Developmental Drive", "Exploration", "Epistemic Value"],
+      warning: "Hazardous Environment Risk: Pure intrinsic curiosity can steer the robot toward volatile phenomena (fire, unstable voids, collapsing slabs) without safety constraints.",
+      conditionalWarnings: [
+        {
+          whenMissing: ["causal_reasoning", "forward_model"],
+          message: "Unconstrained Curiosity Risk: Intrinsic curiosity active without Causal Reasoning or Sensorimotor Forward Model risks fatal entrapment or secondary collapses."
+        }
+      ],
       requires: ["working_memory"],
       requirementReason: "Curiosity requires a memory buffer to distinguish novel stimuli from already explored states."
     },
@@ -350,20 +380,13 @@ export const workshopConfig: WorkshopConfig = {
       id: "hierarchical_planning",
       name: "Hierarchical Task & Motion Planning",
       category: "cognitive",
-      baseCost: 18,
+      baseCost: 15,
       icon: "GitFork",
       shortDescription: "Decomposes abstract goals ('find survivor') into physical action sequences.",
       detailedDescription: "Bridges high-level symbolic task logic with low-level continuous trajectory optimization. Adapts when an intended doorway is blocked by debris.",
       tags: ["Symbolic Planning", "Goal Decomposition", "Deliberative"],
       requires: ["working_memory"],
       requirementReason: "Hierarchical planning requires working memory to store active task sub-goals.",
-      costModifiers: [
-        {
-          withItemId: "working_memory",
-          costChange: -3,
-          reason: "Working memory buffer directly caches planning state transitions (-3 pts)"
-        }
-      ]
     },
     {
       id: "causal_reasoning",
@@ -388,13 +411,20 @@ export const workshopConfig: WorkshopConfig = {
       id: "human_robot_dialogue",
       name: "Affective Social & Voice Dialogue",
       category: "cognitive",
-      baseCost: 12,
+      baseCost: 10,
       icon: "MessageSquare",
       shortDescription: "Calming voice interaction and stress assessment for trapped survivors.",
       detailedDescription: "Speaks in empathetic, clear language to calm frightened victims, asks screening questions about injuries, and broadcasts reassurance that rescuers are arriving.",
       tags: ["Social HRI", "Survivor Triage", "Voice Interaction"],
       requires: ["acoustic_array"],
-      requirementReason: "Interactive vocal dialogue requires an acoustic microphone array to hear survivor answers."
+      requirementReason: "Interactive vocal dialogue requires an acoustic microphone array to hear survivor answers.",
+      costModifiers: [
+        {
+          withItemId: "biped_humanoid",
+          costChange: -4,
+          reason: "The familiar embodiment facilitates understanding in for victims under panic (-4 pts)"
+        }
+      ]
     },
     {
       id: "forward_model",
@@ -410,7 +440,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "episodic_replay",
       name: "Episodic Memory & Failure Replay",
       category: "cognitive",
-      baseCost: 15,
+      baseCost: 12,
       icon: "History",
       shortDescription: "Retains past traversal episodes to rapidly adapt when getting stuck.",
       detailedDescription: "Stores episodes of near-misses, slip events, or dead-ends. Allows offline consolidation and quick heuristic retrieval when encountering similar rubble formations.",
@@ -418,19 +448,140 @@ export const workshopConfig: WorkshopConfig = {
       requires: ["working_memory"],
       requirementReason: "Episodic encoding transfers traces from active working memory."
     },
+    {
+      id: "health_monitoring",
+      name: "Survivor Vital Signs & Health Triage",
+      category: "cognitive",
+      baseCost: 14,
+      icon: "HeartPulse",
+      shortDescription: "Estimates physiological condition and medical urgency of trapped victims.",
+      detailedDescription: "Applies non-contact physiological vision, acoustics, and thermography to detect respiration rates, superficial vascular perfusion (pulse), hypothermia, micro-movement, and vocal distress to prioritize emergency extraction.",
+      tags: ["Medical Triage", "Vital Signs", "Survivor Aid", "Non-Contact Physiology"],
+      requiresAny: ["rgbd_camera", "thermal_camera", "acoustic_array"],
+      requirementReason: "Requires at least one sensor capable of observing survivor vitals (RGB-D Camera, Thermal Infrared, or Acoustic Array).",
+      costModifiers: [
+        {
+          withItemId: "thermal_camera",
+          costChange: -4,
+          reason: "Thermal imaging allows remote estimation of superficial vascular perfusion and exhaled thermal plumes (-4 pts)"
+        },
+        {
+          withItemId: "acoustic_array",
+          costChange: -3,
+          reason: "Directional microphone array isolates respiratory wheezing, groans, and vocal triage clarity (-3 pts)"
+        },
+        {
+          withItemId: "rgbd_camera",
+          costChange: -2,
+          reason: "Sub-millimeter thoracic wall displacement tracking measures respiratory rate (-2 pts)"
+        }
+      ]
+    },
+    {
+      id: "obstacle_classification",
+      name: "Semantic Obstacle & Affordance Classifier",
+      category: "cognitive",
+      baseCost: 13,
+      icon: "Boxes",
+      shortDescription: "Classifies rubble as movable, climbable, avoidable, or load-bearing.",
+      detailedDescription: "Analyzes obstacle geometry, material density, and structural load to decide whether debris can be shoved aside, traversed, or if touching it risks triggering a secondary collapse.",
+      tags: ["Affordance Extraction", "Scene Understanding", "Navigation & Manipulation"],
+      requiresAny: ["ground_radar", "lidar_3d", "rgbd_camera"],
+      requirementReason: "Requires spatial depth or sub-surface sensors (Ground Radar, 3D LiDAR, or RGB-D Camera) to evaluate obstacle structure.",
+      costModifiers: [
+        {
+          withItemId: "ground_radar",
+          costChange: -4,
+          reason: "Sub-surface radar reveals internal void volume and buried foundation anchors beneath rubble (-4 pts)"
+        },
+        {
+          withItemId: "lidar_3d",
+          costChange: -3,
+          reason: "High-density point clouds calculate obstacle mass balance and contact grasp affordances (-3 pts)"
+        },
+        {
+          withItemId: "tactile_skin",
+          costChange: -1,
+          reason: "Physical probe contact directly senses obstacle friction and mechanical compliance (-3 pts)"
+        }
+      ]
+    },
 
     // =========================================================================
     // 4. MOTOR SKILLS (Locomotion, Manipulation & Action Repertoire)
     // =========================================================================
     {
+      id: "simple_locomotion",
+      name: "Simple Flat-terrain Gait",
+      category: "motor",
+      baseCost: 8,
+      icon: "Footprints",
+      shortDescription: "Ability to navigate in areas with minimal rubble.",
+      detailedDescription: "A low-complexity but energy effective gait generation able to move in relatively unencumbered areas.",
+      tags: ["Locomotion", "Energy-efficiency"]
+    },
+    {
       id: "adaptive_locomotion",
       name: "Adaptive Rough-Terrain Gait",
       category: "motor",
       baseCost: 16,
-      icon: "Footprints",
+      icon: "SportShoe",
       shortDescription: "Continuous dynamic terrain adaptation and foothold selection.",
       detailedDescription: "Real-time compliance adjustment that handles shifting stones, stairs, and loose sand without stumbling.",
       tags: ["Locomotion", "Foothold Adaptation", "Stability"]
+    },
+    {
+      id: "simple_arm",
+      name: "Multi-DOF Simple Robotic Arm",
+      category: "motor",
+      baseCost: 14,
+      icon: "RobotArm",
+      shortDescription: "Lightweight 6-axis manipulator for basic operation.",
+      detailedDescription: "Equipped with a hard gripper to move simple lightweight objects, such as cable, partially open doors, and the like.",
+      tags: ["Manipulation", "Dexterity"],
+      incompatibleWith: ["snake_robot"],
+      incompatibilityReasons: {
+        "snake_robot": "Snake morphology lacks rigid anchor joints to stabilize a cantilevered arm.",
+      },
+      costModifiers: [
+        {
+          withItemId: "tactile_skin",
+          costChange: -2,
+          reason: "Haptic feedback eliminates bulky vision-only manipulation control loops (-2 pts)"
+        }
+      ]
+    },
+    {
+      id: "wholebody_manipulation",
+      name: "Wholebody Manipulation",
+      category: "motor",
+      baseCost: 20,
+      icon: "LineSquiggle",
+      shortDescription: "Use multiple contact points across the body for manipulation.",
+      detailedDescription: "Leverage redundancy and morphology to carry out complex manipulative actions.",
+      tags: ["Manipulation", "Whole-Body", "Multi-Contact"],
+      costModifiers: [
+        {
+          withItemId: "snake_robot",
+          costChange: -8,
+          reason: "The highly redundant morphology allows the snake robot to use its entire body to grasp things. (-8 pts)"
+        },
+        {
+          withItemId: "biped_humanoid",
+          costChange: -4,
+          reason: "The redundant morphology allows to use both arms simultaneously as well as the trunk. (-4 pts)"
+        },
+        {
+          withItemId: "quadruped_robot",
+          costChange: -2,
+          reason: "The legs can offer some limited assistance in manipulating larger objects. (-2 pts)"
+        },
+        {
+          withItemId: "tactile_skin",
+          costChange: -4,
+          reason: "Haptic skin across different body parts allows to map multiple contact points. (-4 pts)"
+        }
+      ]
     },
     {
       id: "precision_arm",
@@ -439,7 +590,7 @@ export const workshopConfig: WorkshopConfig = {
       baseCost: 22,
       icon: "Crosshair",
       shortDescription: "Dexterous 6-axis manipulator for careful debris clearing and latch opening.",
-      detailedDescription: "Equipped with a soft gripper to delicately lift debris off trapped limbs, open doors, or deliver two-way radios and water to survivors.",
+      detailedDescription: "Equipped with a soft gripper to delicately lift small debris off trapped limbs, open doors, or deliver objects to survivors.",
       tags: ["Manipulation", "Dexterity", "Survivor Aid"],
       incompatibleWith: ["snake_robot", "micro_aerial_drone"],
       incompatibilityReasons: {
@@ -493,7 +644,7 @@ export const workshopConfig: WorkshopConfig = {
       id: "slither_crevice_gait",
       name: "Narrow Crevice Undulation Gait",
       category: "motor",
-      baseCost: 14,
+      baseCost: 12,
       icon: "Maximize2",
       shortDescription: "Whole-body concertina and lateral undulation through tight voids.",
       detailedDescription: "Propels the robot through gaps as narrow as 15 cm by undulating body segments against surrounding rubble walls.",
@@ -508,6 +659,39 @@ export const workshopConfig: WorkshopConfig = {
       shortDescription: "Motorized cable reel for descending vertical elevator shafts.",
       detailedDescription: "Allows controlled vertical descent into shattered stairwells, sinkholes, or mine shafts, and provides a physical retrieval tether if system power is cut.",
       tags: ["Vertical Access", "Tethered Safety", "Elevator Shafts"]
+    },
+    {
+      id: "fire_extinguisher",
+      name: "CO2 Fire Suppression System",
+      category: "motor",
+      baseCost: 8,
+      icon: "Flame",
+      shortDescription: "Suppresses active flash fires and cools hot debris to open blocked passages.",
+      detailedDescription: "High-pressure CO2 canister capable of 1–2 emergency discharge bursts to knock down open flames, cool scorching debris, and protect trapped victims. Carries substantial dead-weight and strong recoil.",
+      tags: ["Fire Suppression", "Hazard Mitigation", "Heavy Payload", "1-2 Uses"],
+      incompatibleWith: ["micro_aerial_drone", "snake_robot"],
+      incompatibilityReasons: {
+        "micro_aerial_drone": "Heavy pressurized steel canister exceeds drone maximum payload lift capacity.",
+        "snake_robot": "Bulky canister and high discharge recoil torque destabilize serpentine undulating locomotion."
+      },
+      conditionalWarnings: [
+        {
+          whenSelectedWith: ["biped_humanoid"],
+          message: "Recoil & Payload Warning: CO2 discharge recoil and top-heavy canister mass create severe tipping risks for biped humanoid balance."
+        }
+      ],
+      costModifiers: [
+        {
+          withItemId: "gas_sniffer",
+          costChange: -3,
+          reason: "Gas sniffer identifies explosive atmosphere concentrations before discharge (-3 pts)"
+        },
+        {
+          withItemId: "thermal_camera",
+          costChange: -3,
+          reason: "Thermal imager pinpoints subsurface flame core to avoid wasting limited CO2 charges (-3 pts)"
+        }
+      ]
     }
   ]
 };
