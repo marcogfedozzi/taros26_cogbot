@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, RotateCcw, Share2, Check, FileText } from 'lucide-react';
+import { Bot, RotateCcw, Share2, Check, FileText, Lock } from 'lucide-react';
 import { Scenario } from '../types/robot';
 import { ConfigurationSummary } from '../utils/robotCalculations';
 
@@ -17,6 +17,8 @@ interface HeaderProps {
   shareCopied: boolean;
   summary: ConfigurationSummary;
   totalBudget: number;
+  showOrganizerGuide?: boolean;
+  isOrganizerAuthenticated?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -32,7 +34,9 @@ export const Header: React.FC<HeaderProps> = ({
   onShare,
   shareCopied,
   summary,
-  totalBudget
+  totalBudget,
+  showOrganizerGuide = true,
+  isOrganizerAuthenticated = false
 }) => {
   const percentage = Math.min(100, Math.round((summary.totalEffectiveCost / totalBudget) * 100));
   const isOver = summary.remainingPoints < 0;
@@ -128,15 +132,24 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          <button
-            type="button"
-            onClick={onOpenOrganizerGuide}
-            className="px-2.5 py-1.5 rounded-md hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors text-xs font-bold uppercase tracking-wide cursor-pointer flex items-center gap-1"
-            title="Edit Data Guide"
-          >
-            <FileText className="w-3.5 h-3.5 text-blue-600" />
-            <span className="hidden sm:inline">Data Guide</span>
-          </button>
+          {showOrganizerGuide && (
+            <button
+              type="button"
+              onClick={onOpenOrganizerGuide}
+              className="px-2.5 py-1.5 rounded-md hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors text-xs font-bold uppercase tracking-wide cursor-pointer flex items-center gap-1.5"
+              title={isOrganizerAuthenticated ? "Open Data Guide (Unlocked)" : "Open Organizer Data Guide (Password Protected)"}
+            >
+              {isOrganizerAuthenticated ? (
+                <FileText className="w-3.5 h-3.5 text-emerald-600" />
+              ) : (
+                <Lock className="w-3.5 h-3.5 text-slate-400" />
+              )}
+              <span className="hidden sm:inline">Data Guide</span>
+              {isOrganizerAuthenticated && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              )}
+            </button>
+          )}
 
           <button
             type="button"

@@ -261,6 +261,23 @@ export const workshopConfig: WorkshopConfig = {
       ]
     },
     {
+      id: "sonar",
+      name: "Active SONAR Ultrasonic Ranging",
+      category: "sensor",
+      baseCost: 10,
+      icon: "AudioWaveform",
+      shortDescription: "Directional depth perception using soundwaves.",
+      detailedDescription: "Works on shorter distances, centimeter level precision; is not blocked by smoke, steam, or other visual obstacles; cannot penetrate solid objects; sound speed changes due to temperature and humidity.",
+      tags: ["Geometric Precision", "Metric Scale", "Active Lighting"],
+      costModifiers: [
+        {
+          withItemId: "acoustic_array",
+          costChange: -4,
+          reason: "Hardware can be partially reused for both active and passive sound localization (-4 pts)"
+        }
+      ]
+    },
+    {
       id: "acoustic_array",
       name: "Multimodal Acoustic Microphone Array",
       category: "sensor",
@@ -323,6 +340,29 @@ export const workshopConfig: WorkshopConfig = {
       shortDescription: "High-grade inertial measurement unit and wheel/joint encoders.",
       detailedDescription: "Tracks acceleration, pitch, roll, and dead-reckoning displacement when external visual tracking or GPS is unavailable.",
       tags: ["Inertial", "Orientation", "Low Cost", "Dead Reckoning"]
+    },
+    {
+      id: "force_torque",
+      name: "Force/Torque sensors on actuators",
+      category: "sensor",
+      baseCost: 6,
+      icon: "BicepsFlexed",
+      shortDescription: "Measure the applied and received force on joints.",
+      detailedDescription: "Enables to estimate the force applied on objects, allowing finer and safer manipulation, and estimating contact forces on the floor and walls.",
+      tags: ["Precision", "Effort", "Safety"],
+      costModifiers: [
+        {
+          withItemId: "precision_arm",
+          costChange: -4,
+          reason: "Force estimation allows safer manipulation (-4 pts)"
+        },
+        {
+          withItemId: "causal_reasoning",
+          costChange: -2,
+          reason: "Direct force measurement gives physical information on the environment (-2 pts)"
+        },
+       
+      ]
     },
 
     // =========================================================================
@@ -500,10 +540,15 @@ export const workshopConfig: WorkshopConfig = {
           reason: "High-density point clouds calculate obstacle mass balance and contact grasp affordances (-3 pts)"
         },
         {
+          withItemId: "force_torque",
+          costChange: -2,
+          reason: "Response force measurements inform obstacle mechanical compliance (-2 pts)"
+        },
+        {
           withItemId: "tactile_skin",
           costChange: -1,
-          reason: "Physical probe contact directly senses obstacle friction and mechanical compliance (-3 pts)"
-        }
+          reason: "Physical probe contact directly senses obstacle friction and mechanical compliance (-1 pts)"
+        },
       ]
     },
 

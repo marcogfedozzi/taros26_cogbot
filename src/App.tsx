@@ -19,9 +19,21 @@ import { CategoryNav, ActiveTab } from './components/CategoryNav';
 import { ComponentCard } from './components/ComponentCard';
 import { ReviewSummary } from './components/ReviewSummary';
 import { OrganizerGuideModal } from './components/OrganizerGuideModal';
-import { ArrowRight, ArrowLeft, Layers, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { OrganizerPasswordModal } from './components/OrganizerPasswordModal';
+import { ArrowRight, ArrowLeft, Layers, PanelLeftClose, PanelLeftOpen, Lock } from 'lucide-react';
 
 const STORAGE_KEY = 'rescue_robot_workshop_config_v1';
+
+/**
+ * =========================================================================
+ * WORKSHOP ORGANIZER CONTROLS:
+ * - ENABLE_DATA_GUIDE: Set to false to completely hide/remove the Data Guide
+ *   from participants. Set to true to display it behind a password.
+ * - ORGANIZER_PASSWORD: Password required to unlock the Data Guide.
+ * =========================================================================
+ */
+export const ENABLE_DATA_GUIDE = true;
+export const ORGANIZER_PASSWORD = 'ILostTheGame';
 
 export default function App() {
   // 1. Initial State from URL Hash or localStorage or Defaults
@@ -69,8 +81,24 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('embodiment');
   const [budget, setBudget] = useState<number>(workshopConfig.defaultBudget);
   const [isOrganizerGuideOpen, setIsOrganizerGuideOpen] = useState<boolean>(false);
+  const [isOrganizerPasswordOpen, setIsOrganizerPasswordOpen] = useState<boolean>(false);
+  const [isOrganizerAuthenticated, setIsOrganizerAuthenticated] = useState<boolean>(false);
   const [shareCopied, setShareCopied] = useState<boolean>(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState<boolean>(false);
+
+  const handleOpenOrganizerGuide = () => {
+    if (isOrganizerAuthenticated) {
+      setIsOrganizerGuideOpen(true);
+    } else {
+      setIsOrganizerPasswordOpen(true);
+    }
+  };
+
+  const handlePasswordSuccess = () => {
+    setIsOrganizerAuthenticated(true);
+    setIsOrganizerPasswordOpen(false);
+    setIsOrganizerGuideOpen(true);
+  };
 
   // 2. Persist to localStorage whenever state updates
   useEffect(() => {
@@ -189,7 +217,9 @@ export default function App() {
         selectedScenarioId={selectedScenarioId}
         onScenarioChange={setSelectedScenarioId}
         onReset={handleReset}
-        onOpenOrganizerGuide={() => setIsOrganizerGuideOpen(true)}
+        onOpenOrganizerGuide={handleOpenOrganizerGuide}
+        showOrganizerGuide={ENABLE_DATA_GUIDE}
+        isOrganizerAuthenticated={isOrganizerAuthenticated}
         onShare={handleShare}
         shareCopied={shareCopied}
         summary={summary}
@@ -345,30 +375,47 @@ export default function App() {
           <span className="text-slate-700 uppercase font-semibold">Scenario: {currentScenario.title.split(':')[0]}</span>
           <span className="text-slate-600 uppercase hidden md:inline">Env: {currentScenario.environment}</span>
         </div>
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => setIsOrganizerGuideOpen(true)}
-            className="text-blue-600 hover:underline uppercase font-bold tracking-wider cursor-pointer"
-          >
-            Edit Data Guide &rarr;
-          </button>
-          <span className="text-slate-400 font-mono italic hidden sm:inline">
-            DATA_STRUCTURE: workshopData.ts | SCHEMA: config_v2
-          </span>
-        </div>
+        {ENABLE_DATA_GUIDE && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleOpenOrganizerGuide}
+              className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-800 font-medium cursor-pointer transition-colors px-2 py-1 rounded hover:bg-slate-200/60"
+              title="Protected Organizer Guide"
+            >
+              <Lock className="w-3 h-3 text-slate-400" />
+              <span>Organizer Data Guide</span>
+            </button>
+            {isOrganizerAuthenticated && (
+              <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-mono text-[9px] uppercase font-bold">
+                Unlocked
+              </span>
+            )}
+          </div>
+        )}
       </footer>
 
-      {/* Organizer Guide Modal */}
-      <OrganizerGuideModal
-        isOpen={isOrganizerGuideOpen}
-        onClose={() => setIsOrganizerGuideOpen(false)}
-        currentBudget={budget}
-        onBudgetOverride={(newB) => {
-          setBudget(newB);
-          setIsOrganizerGuideOpen(false);
-        }}
-      />
+      {/* Organizer Password & Guide Modals */}
+      {ENABLE_DATA_GUIDE && (
+        <>
+          <OrganizerPasswordModal
+            isOpen={isOrganizerPasswordOpen}
+            onClose={() => setIsOrganizerPasswordOpen(false)}
+            onSuccess={handlePasswordSuccess}
+            correctPassword={ORGANIZER_PASSWORD}
+          />
+
+          <OrganizerGuideModal
+            isOpen={isOrganizerGuideOpen}
+            onClose={() => setIsOrganizerGuideOpen(false)}
+            currentBudget={budget}
+            onBudgetOverride={(newB) => {
+              setBudget(newB);
+              setIsOrganizerGuideOpen(false);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
