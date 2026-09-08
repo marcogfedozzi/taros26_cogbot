@@ -101,7 +101,7 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({
           <div className="mb-3 bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 text-xs text-emerald-800 space-y-1">
             <div className="flex items-center gap-1 font-bold text-emerald-900 text-[10px] uppercase tracking-wider">
               <Sparkles className="w-3 h-3 text-emerald-600" />
-              <span>Active Synergy Applied:</span>
+              <span>Active Synergy (Discount on Total):</span>
             </div>
             {appliedModifiers.map((mod, i) => (
               <p key={i} className="text-[11px] text-emerald-700">
@@ -120,7 +120,7 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({
             </div>
             {potentialSynergies.map((syn, i) => (
               <p key={i} className="text-[11px] text-blue-800">
-                Saves {syn.potentialDiscount} pts with <strong>{syn.partnerName}</strong>
+                Saves {syn.potentialDiscount} pts on total with <strong>{syn.partnerName}</strong>
               </p>
             ))}
           </div>
@@ -210,20 +210,19 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({
       {/* Footer: Price & Action */}
       <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
         <div className="flex items-baseline gap-1">
-          {hasDiscount && (
-            <span className="text-xs text-slate-400 line-through font-mono">
-              {baseCost}
-            </span>
-          )}
           <span className="text-xl font-black text-slate-700 font-mono">
-            {effectiveCost}
+            {baseCost}
           </span>
           <span className="text-[10px] text-slate-400 font-bold uppercase">
             PTS
           </span>
-          {hasDiscount && (
-            <span className="ml-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded font-mono">
-              -{costDiscount}p
+          {hasDiscount && isSelected && (
+            <span
+              title="Synergy discount applied to total configuration budget"
+              className="ml-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-mono flex items-center gap-0.5"
+            >
+              <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
+              -{costDiscount}p to total
             </span>
           )}
         </div>

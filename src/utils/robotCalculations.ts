@@ -46,7 +46,7 @@ export function calculateComponentState(
         if (mod.withItemId === component.id) {
           // Check if we didn't already record this pair
           const alreadyRecorded = appliedModifiers.some(
-            m => m.partnerName === other.name && m.costChange === mod.costChange
+            m => m.partnerName === other.name
           );
           if (!alreadyRecorded) {
             appliedModifiers.push({
@@ -61,21 +61,27 @@ export function calculateComponentState(
     }
   }
 
-  const effectiveCost = Math.max(1, component.baseCost + modifierSum);
-  const costDiscount = -modifierSum; // positive number means saved points
+  // Individual component maintains its baseCost; synergy discount is applied to total budget
+  const effectiveCost = component.baseCost;
+  const costDiscount = modifierSum < 0 ? Math.abs(modifierSum) : 0; // points saved on total budget
 
   // 2. Calculate potential synergies (if this component were selected right now)
   const potentialSynergies: EffectiveComponentState['potentialSynergies'] = [];
+  const potentialDeduplication = new Set<string>();
   if (!isSelected) {
     if (component.costModifiers) {
       for (const mod of component.costModifiers) {
         if (selectedItemIds.includes(mod.withItemId)) {
           const partner = componentMap.get(mod.withItemId);
-          potentialSynergies.push({
-            partnerName: partner ? partner.name : mod.withItemId,
-            potentialDiscount: -mod.costChange,
-            reason: mod.reason
-          });
+          const pName = partner ? partner.name : mod.withItemId;
+          if (!potentialDeduplication.has(pName)) {
+            potentialDeduplication.add(pName);
+            potentialSynergies.push({
+              partnerName: pName,
+              potentialDiscount: Math.abs(mod.costChange),
+              reason: mod.reason
+            });
+          }
         }
       }
     }
@@ -85,11 +91,15 @@ export function calculateComponentState(
       if (selectedComp && selectedComp.costModifiers) {
         for (const mod of selectedComp.costModifiers) {
           if (mod.withItemId === component.id) {
-            potentialSynergies.push({
-              partnerName: selectedComp.name,
-              potentialDiscount: -mod.costChange,
-              reason: mod.reason
-            });
+            const pName = selectedComp.name;
+            if (!potentialDeduplication.has(pName)) {
+              potentialDeduplication.add(pName);
+              potentialSynergies.push({
+                partnerName: pName,
+                potentialDiscount: Math.abs(mod.costChange),
+                reason: mod.reason
+              });
+            }
           }
         }
       }
@@ -255,7 +265,6 @@ export function calculateConfigurationSummary(
   };
 
   let totalBaseCost = 0;
-  let totalEffectiveCost = 0;
   const activeSynergies: ConfigurationSummary['activeSynergies'] = [];
   const synergyDeduplication = new Set<string>();
   const warnings: string[] = [];
@@ -263,23 +272,9 @@ export function calculateConfigurationSummary(
   for (const item of selectedComponents) {
     selectedByCategory[item.category].push(item);
     totalBaseCost += item.baseCost;
+    categoryCosts[item.category] += item.baseCost;
 
     const state = calculateComponentState(item, selectedItemIds, allComponents);
-    totalEffectiveCost += state.effectiveCost;
-    categoryCosts[item.category] += state.effectiveCost;
-
-    for (const mod of state.appliedModifiers) {
-      const key = [item.name, mod.partnerName].sort().join(':::');
-      if (!synergyDeduplication.has(key)) {
-        synergyDeduplication.add(key);
-        activeSynergies.push({
-          itemA: item.name,
-          itemB: mod.partnerName,
-          costChange: mod.costChange,
-          reason: mod.reason
-        });
-      }
-    }
 
     // Collect active dynamic warnings from selected items
     for (const w of state.activeWarnings) {
@@ -289,7 +284,37 @@ export function calculateConfigurationSummary(
     }
   }
 
-  const totalSavings = totalBaseCost - totalEffectiveCost;
+  // Calculate unique synergistic pairs across selected components (points detracted once per pair)
+  for (const item of selectedComponents) {
+    if (item.costModifiers) {
+      for (const mod of item.costModifiers) {
+        if (selectedItemIds.includes(mod.withItemId) && mod.withItemId !== item.id) {
+          const partner = componentMap.get(mod.withItemId);
+          const pairKey = [item.id, mod.withItemId].sort().join(':::');
+          if (!synergyDeduplication.has(pairKey)) {
+            synergyDeduplication.add(pairKey);
+            activeSynergies.push({
+              itemA: item.name,
+              itemB: partner ? partner.name : mod.withItemId,
+              costChange: mod.costChange,
+              reason: mod.reason
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Calculate net synergy discount applied to the total budget
+  const totalSavings = activeSynergies.reduce((sum, syn) => {
+    return syn.costChange < 0 ? sum + Math.abs(syn.costChange) : sum;
+  }, 0);
+
+  const totalPenalties = activeSynergies.reduce((sum, syn) => {
+    return syn.costChange > 0 ? sum + syn.costChange : sum;
+  }, 0);
+
+  const totalEffectiveCost = Math.max(0, totalBaseCost - totalSavings + totalPenalties);
   const remainingPoints = budget - totalEffectiveCost;
   const isOverBudget = remainingPoints < 0;
 
@@ -373,7 +398,7 @@ export function generateTextSummary(
   lines.push(`Scenario: ${scenarioTitle}`);
   lines.push(`Budget: ${summary.totalEffectiveCost} / ${totalBudget} points (${summary.remainingPoints} pts remaining)`);
   if (summary.totalSavings > 0) {
-    lines.push(`Active Synergies Saved: ${summary.totalSavings} points`);
+    lines.push(`Active Synergies Discount (on total): -${summary.totalSavings} points`);
   }
   lines.push("==================================================");
   lines.push("");

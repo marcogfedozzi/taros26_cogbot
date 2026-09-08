@@ -200,10 +200,10 @@ export const CurrentBuildSidebar: React.FC<CurrentBuildSidebarProps> = ({
           <div className="p-2.5 bg-blue-950/60 border border-blue-800/60 rounded-lg text-[11px] text-blue-300 flex items-center justify-between">
             <span className="flex items-center gap-1.5 font-medium">
               <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-              Synergy Savings:
+              Synergy Discount (on total):
             </span>
-            <span className="font-mono font-bold text-blue-300">
-              +{summary.totalSavings} pts
+            <span className="font-mono font-bold text-emerald-400">
+              -{summary.totalSavings} pts
             </span>
           </div>
         )}

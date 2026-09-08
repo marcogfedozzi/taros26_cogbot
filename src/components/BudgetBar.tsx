@@ -55,7 +55,7 @@ export const BudgetBar: React.FC<BudgetBarProps> = ({
             {summary.totalSavings > 0 && (
               <div className="flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                <span>{summary.totalSavings} pts saved in synergies!</span>
+                <span>{summary.totalSavings} pts synergy discount on total</span>
               </div>
             )}
           </div>

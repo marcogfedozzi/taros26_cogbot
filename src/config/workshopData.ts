@@ -552,8 +552,8 @@ export const workshopConfig: WorkshopConfig = {
       ]
     },
     {
-      id: "wholebody_manipulation",
-      name: "Wholebody Manipulation",
+      id: "whole-body_manipulation",
+      name: "Whole-Body Manipulation",
       category: "motor",
       baseCost: 20,
       icon: "LineSquiggle",

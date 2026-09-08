@@ -143,10 +143,10 @@ export const ReviewSummary: React.FC<ReviewSummaryProps> = ({
                 <div className="h-8 w-px bg-slate-200" />
                 <div>
                   <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider block flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-emerald-600" /> Saved
+                    <Sparkles className="w-3 h-3 text-emerald-600" /> Synergy Discount
                   </span>
                   <span className="text-xl font-bold font-mono text-emerald-600">
-                    +{summary.totalSavings} pts
+                    -{summary.totalSavings} pts
                   </span>
                 </div>
               </>
@@ -492,7 +492,7 @@ export const ReviewSummary: React.FC<ReviewSummaryProps> = ({
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-emerald-600" />
             <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-900">
-              Active Architectural Synergies ({summary.totalSavings} pts total discount)
+              Active Architectural Synergies (-{summary.totalSavings} pts discount on total)
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -503,7 +503,7 @@ export const ReviewSummary: React.FC<ReviewSummaryProps> = ({
                     {syn.itemA} &harr; {syn.itemB}
                   </span>
                   <span className="font-mono font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">
-                    {syn.costChange > 0 ? `+${syn.costChange}` : syn.costChange} pts
+                    {syn.costChange > 0 ? `+${syn.costChange}` : syn.costChange} pts on total
                   </span>
                 </div>
                 <p className="text-slate-600 text-[11px]">
