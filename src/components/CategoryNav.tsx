@@ -46,7 +46,7 @@ const TABS: TabDefinition[] = [
   {
     id: 'review',
     label: '05. Collective Result',
-    sublabel: 'Configuration Blueprint',
+    sublabel: 'Robot Schematic & Review',
     icon: ClipboardCheck
   }
 ];

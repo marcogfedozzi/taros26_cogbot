@@ -14,14 +14,21 @@ function toPascalCase(str: string): string {
     .replace(/^(.)/, (_, c) => c.toUpperCase());
 }
 
+const iconAliases: Record<string, string> = {
+  SportShoe: 'Footprints',
+  RobotArm: 'Bot',
+  LineSquiggle: 'Spline',
+};
+
 export const DynamicIcon: React.FC<DynamicIconProps> = ({ name, className = "w-5 h-5" }) => {
   if (!name) return <Bot className={className} />;
 
   const iconsRecord = LucideIcons as unknown as Record<string, React.ElementType>;
 
-  // Try direct name match, then PascalCase, then default
-  const pascalName = toPascalCase(name);
-  const IconComponent = iconsRecord[name] || iconsRecord[pascalName] || HelpCircle;
+  // Check alias first, then direct name, then PascalCase, then default
+  const resolvedName = iconAliases[name] || name;
+  const pascalName = toPascalCase(resolvedName);
+  const IconComponent = iconsRecord[resolvedName] || iconsRecord[pascalName] || iconsRecord[name] || HelpCircle;
 
   return <IconComponent className={className} />;
 };

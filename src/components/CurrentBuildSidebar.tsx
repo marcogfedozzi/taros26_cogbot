@@ -244,7 +244,7 @@ export const CurrentBuildSidebar: React.FC<CurrentBuildSidebarProps> = ({
               : 'bg-blue-600 hover:bg-blue-500 text-white'
           }`}
         >
-          <span>Finalize Configuration</span>
+          <span>Review Robot Blueprint &amp; Schematic</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

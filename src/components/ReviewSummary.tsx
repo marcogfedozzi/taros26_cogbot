@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RobotComponent, Scenario } from '../types/robot';
 import { ConfigurationSummary, generateTextSummary } from '../utils/robotCalculations';
 import { DynamicIcon } from './DynamicIcon';
+import { RobotVisualizer } from './RobotVisualizer';
 import {
   Boxes,
   Eye,
@@ -231,6 +232,14 @@ export const ReviewSummary: React.FC<ReviewSummaryProps> = ({
           </div>
         )}
       </div>
+
+      {/* Robot Embodiment & Modular Architecture Schematic */}
+      <RobotVisualizer
+        summary={summary}
+        teamName={teamName}
+        scenarioTitle={scenario.title}
+        onEditCategory={onEditCategory}
+      />
 
       {/* Grid of 4 Architectural Layers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
